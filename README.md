@@ -1,32 +1,48 @@
 # sales_insite
 Sales Insight Data Analysis using SQL &  Power BI 
-Sales Insight Data Analysis using SQL & Power BI | Self Project
+### Data Analysis Using SQL
 
-This independent project, undertaken in July 2023, revolves around conducting comprehensive sales data analysis using SQL and Power BI. The objective was to transform raw data into actionable insights through effective visualization, empowering informed decision-making.
+1. Show all customer records
 
-Project Highlights:
+    `SELECT * FROM customers;`
 
-Applied SQL to refine raw sales data, enabling data transformation and extraction of valuable insights.
-Utilized Power BI to connect to MySQL database, effectively retrieving and integrating data for analysis.
-Employed Power BI's visualization tools to craft interactive and visually compelling dashboards.
-Explored sales trends, customer behavior, and product performance through a combination of SQL queries and Power BI visualizations.
-Emphasized the importance of data-driven decision-making by presenting key findings in an easily understandable format.
-Key Steps:
+1. Show total number of customers
 
-Data Preparation: Transformed raw sales data into a structured format conducive to analysis.
-SQL Analysis: Executed SQL queries to derive meaningful insights from the sales dataset.
-Power BI Integration: Connected Power BI with MySQL to fetch data and create a dynamic link between the database and visualizations.
-Dashboard Creation: Developed interactive dashboards with visualizations such as bar charts, line graphs, and heatmaps.
-Insight Generation: Analyzed sales patterns, identified growth areas, and highlighted opportunities for improvement.
-Benefits:
+    `SELECT count(*) FROM customers;`
 
-Demonstrated proficiency in SQL for data manipulation and extraction.
-Illustrated competence in Power BI for creating insightful and interactive dashboards.
-Showcased the ability to convert raw data into valuable business insights.
-Highlighted the significance of data visualization in facilitating informed decision-making.
-Usage:
+1. Show transactions for Chennai market (market code for chennai is Mark001
 
-Clone the GitHub repository containing the project files.
-Access the SQL queries used for data transformation in the data_preparation.sql file.
-Open the Power BI file (sales_insight.pbix) to interact with the dashboards and visualizations.
-This project effectively showcases my skills in data analysis, SQL querying, and data visualization using Power BI. By transforming raw sales data into actionable insights, it emphasizes the role of data-driven decision-making in enhancing business outcome
+    `SELECT * FROM transactions where market_code='Mark001';`
+
+1. Show distrinct product codes that were sold in chennai
+
+    `SELECT distinct product_code FROM transactions where market_code='Mark001';`
+
+1. Show transactions where currency is US dollars
+
+    `SELECT * from transactions where currency="USD"`
+
+1. Show transactions in 2020 join by date table
+
+    `SELECT transactions.*, date.* FROM transactions INNER JOIN date ON transactions.order_date=date.date where date.year=2020;`
+
+1. Show total revenue in year 2020,
+
+    `SELECT SUM(transactions.sales_amount) FROM transactions INNER JOIN date ON transactions.order_date=date.date where date.year=2020 and transactions.currency="INR\r" or transactions.currency="USD\r";`
+	
+1. Show total revenue in year 2020, January Month,
+
+    `SELECT SUM(transactions.sales_amount) FROM transactions INNER JOIN date ON transactions.order_date=date.date where date.year=2020 and and date.month_name="January" and (transactions.currency="INR\r" or transactions.currency="USD\r");`
+
+1. Show total revenue in year 2020 in Chennai
+
+    `SELECT SUM(transactions.sales_amount) FROM transactions INNER JOIN date ON transactions.order_date=date.date where date.year=2020
+and transactions.market_code="Mark001";`
+
+
+Data Analysis Using Power BI
+============================
+
+1. Formula to create norm_amount column
+
+`= Table.AddColumn(#"Filtered Rows", "norm_amount", each if [currency] = "USD" or [currency] ="USD#(cr)" then [sales_amount]*75 else [sales_amount], type any)
